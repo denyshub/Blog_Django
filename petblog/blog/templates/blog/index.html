@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{%block content%}
+
+<h1>{{title}}</h1>
+<ul>
+    {% for post in posts%}
+    {% if post.is_published %}
+    <li>
+        <h2>{{post.title}}</h2>
+        <p>{{post.content}}</p>
+        <a href="{%url 'post' post.id%}">Читати статтю</a>
+        {% if post.is_published and not forloop.last %}
+        <hr>
+        {%endif%}
+
+    </li>
+    {%endif%}
+    {%endfor%}
+</ul>
+
+{%endblock%}
+

@@ -1,19 +1,27 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{% static 'blog/css/styles.css' %}">
 </head>
 <body>
-<ul>
-    {% for elem in menu%}
-    <li>
-        <a href="{%url elem.url %}">{{elem.title}}</a>
-    </li>
-
-    {%endfor%}
-
-</ul>
-{%block content%} {%endblock%}
+<div class="container">
+    <div class="navbar">
+      <img src="{% static 'blog/images/logo.svg' %}" alt="Logo" class="logo">
+        {% for elem in menu %}
+        <p class = 'nav-links'>
+            <a href="{% url elem.url %}">{{ elem.title }}</a>
+        </p>
+        {% endfor %}
+        <p class = 'nav-links'>
+        <a href="{% url "login" %}"> <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile "></a>
+      </p>
+      </div>
+    {% block content %}
+    {% endblock %}
+</div>
 </body>
 </html>

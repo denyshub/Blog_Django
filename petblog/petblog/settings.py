@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+STATICFILES_DIRS = [ BASE_DIR / 'petblog/static']
 
 # Application definition
 

@@ -1,24 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load blog_tags %} {%block content%}
 
+<h1 class="main-label">{{title}}</h1>
+{%get_categories as categories%}
 
-{%block content%}
+<div class="cats-container">
+  {% for cat in categories%}
+  <a class="cats-link" href="{%url "category" cat.id %}">{{cat.name}}</a>
+  {%endfor%}
+</div>
 
-<h1>{{title}}</h1>
-<ul>
-    {% for post in posts%}
-    {% if post.is_published %}
-    <li>
-        <h2>{{post.title}}</h2>
-        <p>{{post.content}}</p>
-        <a href="{%url 'post' post.id%}">Читати статтю</a>
-        {% if post.is_published and not forloop.last %}
-        <hr>
-        {%endif%}
-
-    </li>
+<div class="posts-container">
+  {% for post in posts%} {% if post.is_published %}
+  <div class="post">
+    <h2 class="post-title">{{post.title}}</h2>
+    <p class="content-text">{{post.content|truncatewords:25}}</p>
+    <a class="read-button" href="{%url 'post' post.id%}">Читати статтю</a>
+    {% if post.is_published and not forloop.last %}
+    <hr />
     {%endif%}
-    {%endfor%}
-</ul>
+  </div>
+  {%endif%} {%endfor%}
+</div>
 
 {%endblock%}
-

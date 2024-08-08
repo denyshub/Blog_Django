@@ -1,9 +1,11 @@
-{%extends 'base.html'%}
-
-{%block content%}
-<div class = 'post-container'>
-<h1 class = 'post-page-title'>{{post.title}}</h1>
-
-<p class = 'post-page-content'>{{post.content|linebreaks}}</p>
+{%extends 'base.html'%} {%block content%}
+<div class = 'title-container'>
+  <h1 class="post-page-title">{{post.title}}</h1>
+  <p class="post-time">Опубліковано: {{ post.time_create|date:"d-m-Y H:i:s" }}</p>
 </div>
-{%endblock%}
+<div class="post-container">
+  <div class="content-container">
+    <p class="post-page-content">{{ post.content|linebreaksbr }}</p>
+  </div>
+  {%endblock%}
+</div>

@@ -4,6 +4,7 @@ body {
   padding: 0;
   background-color: #f4f4f4;
   font-family: "Montserrat", sans-serif;
+  overflow: scroll;
 }
 
 /* Стилі для навігаційного меню */
@@ -28,6 +29,13 @@ body {
   display: flex;
   align-items: center;
   font-size: 23px;
+}
+.nav-links-active{
+ display: flex;
+  align-items: center;
+  font-size: 23px;
+  text-decoration: underline;
+  color: white
 }
 
 .navbar a:hover {
@@ -56,11 +64,13 @@ body {
 
 .read-button {
   font-size: 20px;
+  align-self: end;
   color: rgba(0, 0, 0, 0.692);
   text-decoration: none;
-  border: 1px solid gray;
+
   border-radius: 10px;
   padding: 3px;
+  margin-right: 70px;
   transition: background-color 0.3s ease, color 0.3s ease,
     text-decoration 0.3s ease;
   width: fit-content;
@@ -137,10 +147,49 @@ body {
 
 .post-container {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 30px;
+  align-items: center;
 }
 
-.post-page-title{
-  font-size: 31px;
+.post-page-title {
+  font-size: 50px;
+  padding-bottom: 50px;
+}
+
+.post-page-content {
+  font-size: 30px;
+}
+
+.content-container {
+  width: 95%;
+  border-top: 1px black solid;
+  padding-top: 100px;
+}
+
+.title-container {
+  margin-left: 100px;
+  margin-top: 100px;
+}
+
+.post-time {
+  font-size: 22px;
+  color: gray;
+}
+
+.title-date-cat {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.date-cat{
+  margin-right: 80px;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  color: gray;
+  gap: 30px;
+  font-size: 20px;
+  align-items: center;
 }

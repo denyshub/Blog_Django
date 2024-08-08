@@ -12,9 +12,16 @@
     <div class="navbar">
       <img src="{% static 'blog/images/logo.svg' %}" alt="Logo" class="logo">
         {% for elem in menu %}
-        <p class = 'nav-links'>
+
+        {%if elem.url == menu_selected%}
+        <p class = 'nav-links-active'>
+            {{ elem.title }}
+        </p>
+        {% else %}
+          <p class = 'nav-links'>
             <a href="{% url elem.url %}">{{ elem.title }}</a>
         </p>
+        {% endif %}
         {% endfor %}
         <p class = 'nav-links'>
         <a href="{% url "login" %}"> <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile "></a>

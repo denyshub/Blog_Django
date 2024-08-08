@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from blog.models import Post
+from blog.models import Post, Category
 
 menu = [{'title':'Головна', 'url': 'home' }, {'title':'Про сайт', 'url': 'about' }, { 'title':'Додати статтю', 'url': 'add_page'},{'title':'Зворотній зв\'язок', 'url':'contacts'}]
 
@@ -23,19 +23,23 @@ categories_db = [
 
 
 def index(request):
-    posts = Post.objects.filter(is_published = 1)
+    posts = Post.published.all()
     data = {
         'title': 'Головна сторінка',
-        'cats':'Категорії:',
         'menu': menu,
         'posts': posts,
-        'cat_selected': 0
+        'cat_selected': 0,
+        'menu_selected': 'home'
             }
     return render(request, 'blog/index.html', context = data)
 
 def about(request):
-    context = {'title': 'Про сайт', 'menu': menu}
-    return render(request, 'blog/about.html', context)
+    data = {
+        'title': 'Про сайт',
+        'menu': menu,
+        'menu_selected': 'about'
+    }
+    return render(request, 'blog/about.html', context = data)
 
 def archive(request, year):
     if year > 2024:
@@ -60,21 +64,38 @@ def show_post(request, post_slug):
     return render(request, 'blog/post.html', context=data)
 
 def add_page(request):
+    data = {
+        'title': 'Додати пост',
+        'menu': menu,
+        'menu_selected': 'add_post'
+    }
     return HttpResponse("<h1>Додати пост</h1>")
 
 def contacts(request):
+    data = {
+        'title': 'Контакти',
+        'menu': menu,
+        'menu_selected': 'contacts'
+    }
     return HttpResponse("<h1>Контакти</h1>")
 
 def login(request):
+    data = {
+        'title': 'Увійти',
+        'menu': menu,
+        'menu_selected': 'login'
+    }
     return HttpResponse("<h1>Увійти</h1>")
 
-def show_category(request, category_id):
+def show_category(request, category_slug):
+    category = get_object_or_404(Category, slug = category_slug)
+    posts = Post.published.filter(category_id = category.pk)
     data = {
+        'title_':f'Категорія {category.name}',
         'title': 'За категорією',
-        'cats': 'Категорії:',
         'menu': menu,
-        'posts': data_db,
-        'cat_selected': category_id
+        'posts': posts,
+        'cat_selected': category.pk
     }
 
     return render(request, 'blog/index.html', context=data)

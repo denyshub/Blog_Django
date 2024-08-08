@@ -1,7 +1,6 @@
 {% extends 'base.html' %} {% load blog_tags %} {%block content%}
 
 <h1 class="main-label">{{title}}</h1>
-{%get_categories as categories%}
 
 <div class = 'cats-container-center'>
 <div class="cats-container">
@@ -11,7 +10,16 @@
 <div class="posts-container">
   {% for post in posts%} {% if post.is_published %}
   <div class="post">
-    <h2 class="post-title">{{post.title}}</h2>
+    <div class = 'title-date-cat'>
+      <h2 class="post-title">{{post.title}}</h2>
+      <div class = 'date-cat'>
+          <p>{{post.category}}</p>
+          <p>|</p>
+          
+        <p>{{post.time_create|date:"d-m-Y"}}</p>
+      </div>
+
+    </div>
     <p class="content-text">{{post.content|truncatewords:25}}</p>
     <a class="read-button" href="{{ post.get_absolute_url }}">Читати статтю</a>
     {% if post.is_published and not forloop.last %}

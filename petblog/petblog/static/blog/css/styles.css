@@ -1,6 +1,5 @@
 /* Загальні стилі для сторінки */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
@@ -9,7 +8,7 @@ body {
 
 /* Стилі для навігаційного меню */
 
-.navbar{
+.navbar {
   width: 100%;
   height: 80px;
 
@@ -20,24 +19,25 @@ body {
   justify-content: space-around;
 }
 
-.navbar a{
+.navbar a {
   color: #f4f4f4;
   text-decoration: none;
 }
 
-.nav-links{
-display: flex;
-align-items: center;
-font-size: 23px;
+.nav-links {
+  display: flex;
+  align-items: center;
+  font-size: 23px;
 }
 
-.navbar a:hover{
+.navbar a:hover {
   color: grey;
   text-decoration: underline;
-  transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    text-decoration 0.3s ease;
 }
 
-.posts-container{
+.posts-container {
   border: black solid 2px;
   border-radius: 10px;
   margin: 0px 10px 0px 10px;
@@ -46,7 +46,7 @@ font-size: 23px;
   margin-bottom: 50px;
 }
 
-.post{ 
+.post {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -54,71 +54,93 @@ font-size: 23px;
   padding: 20px;
 }
 
-.read-button{
+.read-button {
   font-size: 20px;
   color: rgba(0, 0, 0, 0.692);
   text-decoration: none;
   border: 1px solid gray;
   border-radius: 10px;
   padding: 3px;
-  transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease;
-  width: fit-content
+  transition: background-color 0.3s ease, color 0.3s ease,
+    text-decoration 0.3s ease;
+  width: fit-content;
 }
 
-.read-button:hover{
-color: white;
-background-color: black;
-transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease;
-
+.read-button:hover {
+  color: white;
+  background-color: black;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    text-decoration 0.3s ease;
 }
 
-.main-label{
-margin-left: 20px;
-text-decoration: underline;
+.main-label {
+  margin-left: 20px;
+  text-decoration: underline;
 
-padding-top: 30px;
+  padding-top: 30px;
 }
 
-.logo{
- width: 35px;
- margin-right:100px ;
+.logo {
+  width: 35px;
+  margin-right: 100px;
 }
 
-.profile{
+.profile {
   width: 30px;
 }
 
-.post-title{
+.post-title {
   font-size: 32px;
 }
 
-.content-text{
+.content-text {
   color: black;
   font-size: 20px;
   text-decoration: none;
   margin-right: 20px;
 }
 
-
-
-.cats-container{
+.cats-container {
   margin: 70px 0px 100px 0px;
-  width: 100%;
+  width: 95%;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 30px;
 }
 
-.cats-link{
+.cats-container-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cats-link {
   font-size: 25px;
   text-decoration: none;
   color: rgb(100, 100, 100);
+  height: fit-content;
 }
 
-.cats-link:hover{
-  transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease;
+.cats-link:hover {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    text-decoration 0.3s ease;
   text-decoration: none;
   color: black;
   text-decoration: underline;
+}
+
+.cats-link-selected {
+  font-size: 25px;
+  text-decoration: underline;
+  color: black;
+}
+
+.post-container {
+  display: flex;
+  width: 100%;
+  padding: 30px;
+}
+
+.post-page-title{
+  font-size: 31px;
 }

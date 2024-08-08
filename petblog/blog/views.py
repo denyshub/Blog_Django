@@ -1,7 +1,9 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
+
+from blog.models import Post
 
 menu = [{'title':'Головна', 'url': 'home' }, {'title':'Про сайт', 'url': 'about' }, { 'title':'Додати статтю', 'url': 'add_page'},{'title':'Зворотній зв\'язок', 'url':'contacts'}]
 
@@ -15,16 +17,19 @@ categories_db = [
     {'id': 1, "name": 'Ігри'},
     {'id': 2, 'name': 'Новини'},
     {'id': 3, 'name':'Подорожі'},
-
-]
+    {'id': 4, 'name': 'Мода'},
+    
+    ]
 
 
 def index(request):
+    posts = Post.objects.filter(is_published = 1)
     data = {
         'title': 'Головна сторінка',
         'cats':'Категорії:',
         'menu': menu,
-        'posts': data_db
+        'posts': posts,
+        'cat_selected': 0
             }
     return render(request, 'blog/index.html', context = data)
 
@@ -42,8 +47,17 @@ def archive(request, year):
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Сторінка не знайдена</h1>" )
 
-def show_post(request, post_id):
-    return HttpResponseNotFound(f"<h1>Пост з id: {post_id}</h1>")
+def show_post(request, post_slug):
+    post = get_object_or_404(Post, slug = post_slug)
+
+    data = {
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1
+    }
+
+    return render(request, 'blog/post.html', context=data)
 
 def add_page(request):
     return HttpResponse("<h1>Додати пост</h1>")
@@ -55,4 +69,12 @@ def login(request):
     return HttpResponse("<h1>Увійти</h1>")
 
 def show_category(request, category_id):
-    return index(request)
+    data = {
+        'title': 'За категорією',
+        'cats': 'Категорії:',
+        'menu': menu,
+        'posts': data_db,
+        'cat_selected': category_id
+    }
+
+    return render(request, 'blog/index.html', context=data)

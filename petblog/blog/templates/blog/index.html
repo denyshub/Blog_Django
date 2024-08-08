@@ -3,18 +3,17 @@
 <h1 class="main-label">{{title}}</h1>
 {%get_categories as categories%}
 
+<div class = 'cats-container-center'>
 <div class="cats-container">
-  {% for cat in categories%}
-  <a class="cats-link" href="{%url "category" cat.id %}">{{cat.name}}</a>
-  {%endfor%}
+{% show_categories cat_selected %}
 </div>
-
+</div>
 <div class="posts-container">
   {% for post in posts%} {% if post.is_published %}
   <div class="post">
     <h2 class="post-title">{{post.title}}</h2>
     <p class="content-text">{{post.content|truncatewords:25}}</p>
-    <a class="read-button" href="{%url 'post' post.id%}">Читати статтю</a>
+    <a class="read-button" href="{{ post.get_absolute_url }}">Читати статтю</a>
     {% if post.is_published and not forloop.last %}
     <hr />
     {%endif%}

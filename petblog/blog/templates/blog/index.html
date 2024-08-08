@@ -7,9 +7,18 @@
 {% show_categories cat_selected %}
 </div>
 </div>
+{%if posts%}
 <div class="posts-container">
-  {% for post in posts%} {% if post.is_published %}
+  {%else%}
+  <div class = 'no-posts'>Немає статей на цю тему :(</div>
+
+  {%endif%}
+  {% for post in posts%} 
+  {%if not forloop.last%}
   <div class="post">
+    {%else%}
+    <div class="post-last">
+    {%endif%}
     <div class = 'title-date-cat'>
       <h2 class="post-title">{{post.title}}</h2>
       <div class = 'date-cat'>
@@ -22,11 +31,10 @@
     </div>
     <p class="content-text">{{post.content|truncatewords:25}}</p>
     <a class="read-button" href="{{ post.get_absolute_url }}">Читати статтю</a>
-    {% if post.is_published and not forloop.last %}
-    <hr />
-    {%endif%}
+  
+    
   </div>
-  {%endif%} {%endfor%}
+  {%endfor%}
 </div>
 
 {%endblock%}

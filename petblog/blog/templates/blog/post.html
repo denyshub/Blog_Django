@@ -1,11 +1,26 @@
-{%extends 'base.html'%} {%block content%}
-<div class = 'title-container'>
+{%extends 'base.html'%} {%block content%} {%with post.tags.all as tags and post.category as cat%}
+<div class="title-container">
   <h1 class="post-page-title">{{post.title}}</h1>
-  <p class="post-time">Опубліковано: {{ post.time_create|date:"d-m-Y H:i:s" }}</p>
+ 
+  <div class="tags-container">
+   <a href="{{ cat.get_absolute_url }}" class="post-tag">{{post.category}}&nbsp; </a>
+   {% if tags%}
+   <a class="post-tag-sign">><a/>
+    {%for tag in tags %}
+    <div class="post-tag">
+      <i> <a href="{{ tag.get_absolute_url }}" class="post-tag">{{tag}}</a> </i>
+    </div>
+    {%endfor%} {%endif%}
+  </div>
+  <div class='time-container'>
+  <p class="post-time">
+    Опубліковано: {{ post.time_create|date:"d-m-Y H:i:s" }}
+  </p>
+</div>
 </div>
 <div class="post-container">
   <div class="content-container">
     <p class="post-page-content">{{ post.content|linebreaksbr }}</p>
   </div>
-  {%endblock%}
 </div>
+{%endwith%} {%endblock%}

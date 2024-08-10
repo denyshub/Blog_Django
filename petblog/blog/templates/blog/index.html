@@ -2,39 +2,39 @@
 
 <h1 class="main-label">{{title}}</h1>
 
-<div class = 'cats-container-center'>
-<div class="cats-container">
-{% show_categories cat_selected %}
-</div>
+<div class="tag-cat-container">
+  <div class="cats-container-center">
+    <div class="cats-container">{% show_categories cat_selected %}</div>
+  </div>
+  <div class="tag-container-col">
+    <div class="tag-cont">{%show_all_tags tag_selected%}</div>
+  </div>
 </div>
 {%if posts%}
 <div class="posts-container">
   {%else%}
-  <div class = 'no-posts'>Немає статей на цю тему :(</div>
-
-  {%endif%}
-  {% for post in posts%} 
-  {%if not forloop.last%}
+  <div class="no-posts">Немає статей на цю тему :(</div>
+  {%endif%} {% for post in posts%} {%if not forloop.last%}
   <div class="post">
     {%else%}
+
     <div class="post-last">
-    {%endif%}
-    <div class = 'title-date-cat'>
-      <h2 class="post-title">{{post.title}}</h2>
-      <div class = 'date-cat'>
+      {%endif%}
+      <div class="title-date-cat">
+        <h2 class="post-title">{{post.title}}</h2>
+        <div class="date-cat">
           <p>{{post.category}}</p>
           <p>|</p>
-          
-        <p>{{post.time_create|date:"d-m-Y"}}</p>
+
+          <p>{{post.time_create|date:"d-m-Y"}}</p>
+        </div>
       </div>
-
+      <p class="content-text">{{post.content|truncatewords:25}}</p>
+      <a class="read-button" href="{{ post.get_absolute_url }}"
+        >Читати статтю</a
+      >
     </div>
-    <p class="content-text">{{post.content|truncatewords:25}}</p>
-    <a class="read-button" href="{{ post.get_absolute_url }}">Читати статтю</a>
-  
-    
+    {%endfor%}
   </div>
-  {%endfor%}
 </div>
-
 {%endblock%}

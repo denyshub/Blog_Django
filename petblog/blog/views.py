@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -8,7 +9,7 @@ from blog.models import Post, Category, TagPost
 menu = [{'title':'Головна', 'url': 'home' }, {'title':'Про сайт', 'url': 'about' }, { 'title':'Додати статтю', 'url': 'add_page'},{'title':'Зворотній зв\'язок', 'url':'contacts'}]
 
 def index(request):
-    posts = Post.published.all()
+    posts = Post.published.all().select_related('category')
     data = {
         'title': 'Головна сторінка',
         'menu': menu,
@@ -74,9 +75,8 @@ def login(request):
 
 def show_category(request, category_slug):
     category = get_object_or_404(Category, slug = category_slug)
-    posts = Post.published.filter(category_id = category.pk)
+    posts = Post.published.filter(category_id = category.pk).select_related('category')
     data = {
-  
         'title': 'За категорією',
         'menu': menu,
         'posts': posts,
@@ -87,7 +87,7 @@ def show_category(request, category_slug):
 
 def show_tag_postlist(request, tag_slug):
     tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED)
+    posts = tag.tags.filter(is_published=Post.Status.PUBLISHED).select_related('category')
     data = {
         'title': f'Тег {tag.tag}',
         'menu': menu,

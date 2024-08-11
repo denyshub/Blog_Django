@@ -1,3 +1,39 @@
 from django.contrib import admin
+from .models import Post, Category
 
-# Register your models here.
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    fields = ['title','slug', 'content', 'category', 'tags']
+    readonly_fields = ['slug',]
+
+    list_display = ('title','time_create','is_published', 'category', 'brief_info')
+
+    filter_horizontal = ['tags',]
+    list_display_links = ( 'title',)
+    ordering = ['-time_create', 'title']
+    list_editable = ('is_published',)
+    list_per_page = 10
+    actions = [
+        'set_published',
+        'set_draft'
+    ]
+    search_fields = ['title','category__name']
+    list_filter = ['category__name', 'is_published']
+    @admin.display(description='Короткий вміст')
+    def brief_info(self, post:Post):
+        return f"Вміст {len(post.content)} символів."
+
+    @admin.action(description='Опублікувати')
+    def set_published(self, request, queryset):
+        count = queryset.update(is_published = Post.Status.PUBLISHED)
+        self.message_user(request, f'Опубліковано {count} статей.')
+
+    @admin.action(description='Приховати')
+    def set_draft(self, request, queryset):
+        count = queryset.update(is_published=Post.Status.DRAFT)
+        self.message_user(request, f'Приховано {count} статей.')
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id','name')
+    list_display_links = ('id', 'name')
+

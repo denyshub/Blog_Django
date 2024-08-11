@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 
+from blog.forms import AddPostForm
 from blog.models import Post, Category, TagPost
 
 menu = [{'title':'Головна', 'url': 'home' }, {'title':'Про сайт', 'url': 'about' }, { 'title':'Додати статтю', 'url': 'add_page'},{'title':'Зворотній зв\'язок', 'url':'contacts'}]
@@ -50,12 +51,23 @@ def show_post(request, post_slug):
     return render(request, 'blog/post.html', context=data)
 
 def add_page(request):
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            try:
+                Post.objects.create(**form.cleaned_data)
+            except:
+                form.add_error(None, 'Виникла помилка доставлення статті')
+    else:
+        form = AddPostForm()
+
     data = {
         'title': 'Додати пост',
         'menu': menu,
+        'form': form,
         'menu_selected': 'add_post'
     }
-    return HttpResponse("<h1>Додати пост</h1>")
+    return render(request, 'blog/addpage.html', context=data)
 
 def contacts(request):
     data = {

@@ -56,15 +56,20 @@ body {
 .post {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   border-bottom: 2px solid black;
+  
+}
+.post-text{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
 }
 .post-last {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  padding: 20px;
+  flex-direction: row;
 }
 .read-button {
   font-size: 20px;
@@ -310,4 +315,15 @@ flex-direction:column;
 display:flex;
 align-items:center;
 justify-content: canter
+}
+
+.post-image-small{
+  width: 300px;
+  left: 10px;
+}
+
+.post-image-big{
+  width: 500px;
+  float: left;
+  padding:0px 30px 30px 0px;
 }

@@ -17,9 +17,12 @@
     Опубліковано: {{ post.time_create|date:"d-m-Y H:i:s" }}
   </p>
 </div>
+
 </div>
 <div class="post-container">
-  <div class="content-container">
+  <div class="content-container"> {%if post.image%}
+    <img src="{{ post.image.url }}" class='post-image-big'>
+    {%endif%}
     <p class="post-page-content">{{ post.content|linebreaksbr }}</p>
   </div>
 </div>

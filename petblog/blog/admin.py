@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import Post, Category
 
 @admin.register(Post)
@@ -6,7 +8,7 @@ class PostAdmin(admin.ModelAdmin):
     fields = ['title','slug','image', 'content', 'category', 'tags']
     readonly_fields = ['slug',]
 
-    list_display = ('title','time_create','is_published', 'category', 'brief_info')
+    list_display = ('title', 'show_image', 'time_create','is_published', 'category')
 
     filter_horizontal = ['tags',]
     list_display_links = ( 'title',)
@@ -20,8 +22,8 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['title','category__name']
     list_filter = ['category__name', 'is_published']
     @admin.display(description='Короткий вміст')
-    def brief_info(self, post:Post):
-        return f"Вміст {len(post.content)} символів."
+    def show_image(self, post:Post):
+        return mark_safe(f"<img src='{post.image.url}' width=50>")
 
     @admin.action(description='Опублікувати')
     def set_published(self, request, queryset):

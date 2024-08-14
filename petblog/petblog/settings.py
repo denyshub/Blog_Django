@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 INTERNAL_IPS = ["127.0.0.1",]
 STATICFILES_DIRS = [ BASE_DIR / 'petblog/static']
 
+MEDIA_ROOT = BASE_DIR / 'media'
 # Application definition
 
 INSTALLED_APPS = [

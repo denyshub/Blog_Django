@@ -291,3 +291,23 @@ flex-direction: row;
   flex-direction: column;
   justify-content: center;
 }
+
+.form-error{
+  color: red;
+
+  list-style-type: none;
+}
+.errorlist{ list-style-type: none;}
+
+.form-input{
+  border-radius: 10px ;
+
+}
+
+.file-form{
+width:100%;
+flex-direction:column;
+display:flex;
+align-items:center;
+justify-content: canter
+}

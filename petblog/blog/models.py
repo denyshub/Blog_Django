@@ -1,3 +1,4 @@
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -25,8 +26,12 @@ class Post(models.Model):
         DRAFT = 0
         PUBLISHED = 1
 
-    title = models.CharField(max_length=255, verbose_name='Заголовок')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    title = models.CharField(max_length=255,verbose_name='Заголовок')
+    slug = models.SlugField(max_length=255, unique=True, db_index=True,  validators=[
+        MinLengthValidator(5, message='Мінімум 5 символів'),
+        MaxLengthValidator(100, message='Максимум 100 символів'),
+    ],)
+    image = models.ImageField(upload_to='images/%Y/%m/%d', default=None, blank=True, null=True, verbose_name = 'Фото')
     content = models.TextField(blank=True,verbose_name='Вміст')
     time_create = models.DateTimeField(auto_now_add=True,verbose_name='Дата створення')
     time_update = models.DateTimeField(auto_now=True,verbose_name='Дата зміни')
@@ -51,7 +56,7 @@ class Post(models.Model):
         return reverse('post', kwargs={'post_slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(translit_to_english(self.title))
+        self.slug = self.slug if self.slug else slugify(translit_to_english(self.title))
         super().save(*args, **kwargs)
 
     
@@ -81,3 +86,6 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+class UploadFile(models.Model):
+    file = models.FileField(upload_to='uploads_model')

@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {%block content%}
 <h1 class="main-label">{{title}}</h1>
 <div class='addpost-form-container'>
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
   {% csrf_token %} 
-  <div>{{form.non_field_errors}}</div>
+  <div class='form-error'>{{form.non_field_errors}}</div>
   {%for f in form%}
   <p><label class='form-label' for '{{f.id_for_label}}'>{{f.label}}</label>{{f}}</p>
   <div class='form-error'>{{f.errors}}

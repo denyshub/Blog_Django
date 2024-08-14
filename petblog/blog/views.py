@@ -1,13 +1,15 @@
+import os, uuid
+
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from blog.forms import AddPostForm
-from blog.models import Post, Category, TagPost
+from blog.forms import AddPostForm, UploadFileForm
+from blog.models import Post, Category, TagPost, UploadFile
 
-menu = [{'title':'Головна', 'url': 'home' }, {'title':'Про сайт', 'url': 'about' }, { 'title':'Додати статтю', 'url': 'add_page'},{'title':'Зворотній зв\'язок', 'url':'contacts'}]
+menu = [{'title':'Головна', 'url': 'home' }, { 'title':'Додати статтю', 'url': 'add_post'},  {'title':'Про сайт', 'url': 'about' },{'title':'Зворотній зв\'язок', 'url':'contacts'}]
 
 def index(request):
     posts = Post.published.all().select_related('category')
@@ -17,17 +19,25 @@ def index(request):
         'posts': posts,
         'cat_selected': 0,
         'menu_selected': 'home',
-                         'tag_selected':0
+        'tag_selected': 0
             }
     return render(request, 'blog/index.html', context = data)
 
+
+
+
 def about(request):
+
     data = {
         'title': 'Про сайт',
         'menu': menu,
-        'menu_selected': 'about'
+        'menu_selected': 'about',
+
     }
-    return render(request, 'blog/about.html', context = data)
+
+    return render(request, 'blog/about.html', context=data)
+
+
 
 def archive(request, year):
     if year > 2024:
@@ -52,12 +62,18 @@ def show_post(request, post_slug):
 
 def add_page(request):
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                Post.objects.create(**form.cleaned_data)
-            except:
-                form.add_error(None, 'Виникла помилка доставлення статті')
+            form.save()
+            return redirect('home')
+        #     try:
+        #         print(form.cleaned_data)
+        #         Post.objects.create(**form.cleaned_data)
+        #         return redirect('home')
+        #     except:
+        #
+        #         form.add_error(None, 'Виникла помилка доставлення статті')
+
     else:
         form = AddPostForm()
 

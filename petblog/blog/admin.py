@@ -3,7 +3,7 @@ from .models import Post, Category
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    fields = ['title','slug', 'content', 'category', 'tags']
+    fields = ['title','slug','image', 'content', 'category', 'tags']
     readonly_fields = ['slug',]
 
     list_display = ('title','time_create','is_published', 'category', 'brief_info')

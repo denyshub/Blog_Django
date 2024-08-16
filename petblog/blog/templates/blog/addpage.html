@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {%block content%}
 <h1 class="main-label">{{title}}</h1>
 <div class='addpost-form-container'>
+  <div class='addpost-form'>
 <form action="" method="POST" enctype="multipart/form-data">
   {% csrf_token %} 
   <div class='form-error'>{{form.non_field_errors}}</div>
@@ -11,6 +12,7 @@
   {%endfor%}
   <p><button type="submit">Відправити</button></p>
 </form>
+</div>
 </div>
 
 {%endblock%}

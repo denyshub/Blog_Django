@@ -9,23 +9,32 @@
 </head>
 <body>
 <div class="container">
-    <div class="navbar">
-      <img src="{% static 'blog/images/logo.svg' %}" alt="Logo" class="logo">
-        {% for elem in main_menu %}
-        {%if elem.url == menu_selected%}
-        <p class = 'nav-links-active'>
-            {{ elem.title }}
-        </p>
-        {% else %}
-          <p class = 'nav-links'>
-            <a href="{% url elem.url %}">{{ elem.title }}</a>
-        </p>
-        {% endif %}
-        {% endfor %}
-        <p class = 'nav-links'>
-        <a href="{% url "users:login" %}"> <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile "></a>
+   <div class="navbar">
+  <img src="{% static 'blog/images/logo.svg' %}" alt="Logo" class="logo">
+
+  {% for elem in main_menu %}
+    {% if elem.url == menu_selected %}
+      <p class='nav-links-active'>
+        {{ elem.title }}
       </p>
+    {% else %}
+      <div  id="nav-link">
+        <a href="{% url elem.url %}">{{ elem.title }}</a>
       </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="profile-container">
+    <a href="#" class="profile-icon">
+      <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile">
+    </a>
+    <div class="dropdown-menu">
+      <a href="{% url 'users:register' %}" class="dropdown-item">Реєстрація</a>
+      <a href="{% url 'users:login' %}" class="dropdown-item">Вхід</a>
+    </div>
+  </div>
+</div>
+
     {% block content %}
     {% endblock %}
     {% block navigation %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {%block content%}
+<h1 class="main-label">Реєстрація</h1>
+<div class="addpost-form-container">
+    <div class = 'addpost-form'>
+    <form method="post">
+        {%csrf_token%}
+
+{{form.as_p}}
+        <button type="submit">Зареєструватися</button>
+  </form>
+</div>
+</div>
+  {%endblock%}

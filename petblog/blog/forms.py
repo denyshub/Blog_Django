@@ -16,11 +16,12 @@ class AddPostForm(forms.ModelForm):
                    'slug': forms.TextInput(attrs={'class': 'form-input'}),
                    'content': forms.Textarea(attrs={'class': 'form-input', 'cols': 50, 'rows': 5}),}
 
-        labels = {'title': 'Заголовок: ', 'image': 'Фото: ','content': 'Вміст: ','is_published': 'Статус: ','category': 'Категорія: ','tags': 'Теги: ',}
+        labels = {'title': 'Заголовок', 'image': 'Фото','content': 'Вміст','is_published': 'Статус','category': 'Категорія','tags': 'Теги',}
+    
     def clean_title(self):
         title = self.cleaned_data['title']
         if len(title) > 100:
-            raise ValidationError('Довжина заголовку більша за 100 символів.')
+            raise ValidationError('Довжина більша за 100 символів.')
 
         elif len(title) < 5:
             raise ValidationError('Довжина менша менша за 5 символів.')

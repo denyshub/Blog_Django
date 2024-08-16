@@ -1,5 +1,7 @@
 import os, uuid
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
@@ -66,7 +68,8 @@ class ShowPost(DataMixin, DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Post.published, slug=self.kwargs[self.slug_url_kwarg])
 
-class AddPage(DataMixin, CreateView):
+
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'blog/addpage.html'
     title_page = 'Додати пост'
@@ -77,6 +80,11 @@ class AddPage(DataMixin, CreateView):
         context = self.get_mixin_context(context)
         return context
 
+
+    def form_valid(self, form):
+        w = form.save(commit=False)
+        w.author = self.request.user
+        return super().form_valid(form)
 
 
 class UpdatePage(DataMixin, UpdateView):

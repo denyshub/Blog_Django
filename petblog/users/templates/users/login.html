@@ -20,17 +20,28 @@
         <p>{{user.email}}</p>
       </div>
     </div>
-   <a href="{%url 'users:logout'%}"> <button class='logout-button'>Вийти</button></a>
+  <form style="display:inline-block" method="post" action="{% url 'users:logout' %}">
+{% csrf_token %}
+<button type="submit">Вийти</button></form>
   
       
     </div>
 
     {%else%}
+    <div class = 'addpost-form'>
     <form method="post">
-      {%csrf_token%} {{form.as_p}}
+        {%csrf_token%}
+        <div class='form-error'>{{form.non_field_errors}}</div>
+  {%for f in form%}
+  <p><label class='form-label' for '{{f.id_for_label}}'>{{f.label}}</label>{{f}}</p>
+  <div class='form-error'>{{f.errors}}
+  </div>
+  {%endfor%}
       <p><button type="submit">Увійти</button></p>
     </form>
     {%endif%}
   </div>
-  {%endblock%}
 </div>
+
+  {%endblock%}
+

@@ -19,18 +19,14 @@ class AddPostForm(forms.ModelForm):
         labels = {'title': 'Заголовок: ', 'image': 'Фото: ','content': 'Вміст: ','is_published': 'Статус: ','category': 'Категорія: ','tags': 'Теги: ',}
     def clean_title(self):
         title = self.cleaned_data['title']
-
-        allowed_chars = "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзииіїйклмнопрстуфхцчшщьюя0123456789'- "
-        if not (set(title) <= set(allowed_chars)):
-            raise ValidationError("Мають бути тільки українськи символи, дефіс та пробіл.")
-
-        elif len(title) > 100:
+        if len(title) > 100:
             raise ValidationError('Довжина заголовку більша за 100 символів.')
 
         elif len(title) < 5:
             raise ValidationError('Довжина менша менша за 5 символів.')
 
         return title
+
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Файл')

@@ -41,4 +41,21 @@
     {%endfor%}
   </div>
 </div>
-{%endblock%}
+{% endblock %}
+{% block navigation %} {% if page_obj.has_other_pages %}
+<nav class="list-pages">
+  <ul>
+    {% for p in paginator.page_range %} {% if p == page_obj.number %}
+    <li class="page-num">
+      <a class="active">{{ p }}</a>
+    </li>
+    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 or p == 1 or p == paginator.page_range|last %}
+    <li class="page-num">
+      <a href="?page={{ p }}">{{ p }}</a>
+    </li>
+    {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}
+    <li class="page-num page-num-active">...</li>
+    {% endif %} {% endfor %}
+  </ul>
+</nav>
+{% endif %} {% endblock %}

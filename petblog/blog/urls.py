@@ -13,6 +13,8 @@ urlpatterns = [
     path('post/<slug:post_slug>/', views.ShowPost.as_view(), name='post'),
     path('archive/<year4:year>/', views.archive, name='archive'),
     path('category/<slug:category_slug>/', views.PostCategory.as_view(), name='category'),
-    path('tag/<slug:tag_slug>/', views.PostTags.as_view(), name = 'tag')
+    path('tag/<slug:tag_slug>/', views.PostTags.as_view(), name='tag'),
+    path('edit/<slug:slug>/', views.UpdatePage.as_view(), name='edit_page'),
+    path('delete/<slug:slug>/', views.DeletePage.as_view(), name='delete_page')
 ]
 

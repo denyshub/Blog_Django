@@ -1,5 +1,6 @@
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
+from django.db.models import Count, Q
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
@@ -20,6 +21,11 @@ class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_published = Post.Status.PUBLISHED)
 
+class NotEmptyCategory(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            num_published_posts=Count('post', filter=Q(post__is_published=True))
+        ).filter(num_published_posts__gt=0)
 
 class Post(models.Model):
     class Status(models.IntegerChoices):
@@ -75,6 +81,9 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'category_slug': self.slug})
+
+    objects = models.Manager()
+    not_empty = NotEmptyCategory()
 
 
 class TagPost(models.Model):

@@ -328,3 +328,52 @@ justify-content: canter
   float: left;
   padding:0px 30px 30px 0px;
 }
+
+/* Загальний стиль для навігації */
+.list-pages {
+  display: flex;
+  justify-content: center; /* Центрує меню на сторінці */
+  padding: 0;
+  margin: 0px 0px 100px 0px;
+  list-style: none;
+
+}
+
+/* Стиль для елементів списку */
+.list-pages ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Стиль для окремих сторінок */
+.list-pages .page-num {
+  margin: 0 5px; /* Відступи між кнопками */
+}
+
+/* Стиль для посилань */
+.list-pages .page-num a {
+  text-decoration: none; /* Забирає підкреслення з посилань */
+  color: #333; /* Колір тексту */
+  padding: 8px 12px; /* Внутрішні відступи */
+  border: 1px solid #ddd; /* Сірий обводка */
+  border-radius: 4px; /* Закруглені кути */
+  transition: background-color 0.3s, color 0.3s; /* Анімація для фону і кольору тексту */
+}
+
+/* Стиль для посилання при наведенні */
+.list-pages .page-num a:hover,
+.list-pages .page-num a:focus {
+  background-color: #f0f0f0; /* Колір фону при наведенні */
+  color: #000; /* Колір тексту при наведенні */
+  border-color: #ccc; /* Колір обводки при наведенні */
+}
+
+/* Стиль для активної сторінки */
+.list-pages .page-num a.active {
+  background-color: #333; /* Темний фон для активної сторінки */
+  color: #fff; /* Білий текст для активної сторінки */
+  border-color: #333; /* Темна обводка для активної сторінки */
+}
+

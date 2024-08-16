@@ -45,6 +45,11 @@
 {% block navigation %} {% if page_obj.has_other_pages %}
 <nav class="list-pages">
   <ul>
+    {%if page_obj.has_previous%}
+    <li class="page-num">
+      <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+    </li>
+    {%endif%}
     {% for p in paginator.page_range %} {% if p == page_obj.number %}
     <li class="page-num">
       <a class="active">{{ p }}</a>
@@ -56,6 +61,11 @@
     {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}
     <li class="page-num page-num-active">...</li>
     {% endif %} {% endfor %}
+    {%if page_obj.has_next%}
+    <li class="page-num">
+      <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+    </li>
+    {%endif%}
   </ul>
 </nav>
 {% endif %} {% endblock %}

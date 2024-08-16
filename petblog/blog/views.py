@@ -15,22 +15,24 @@ from blog.utils import DataMixin
 
 class BlogHome(DataMixin, ListView):
     template_name = 'blog/index.html'
-    #model = Post
     context_object_name = 'posts'
-    title_page= 'Головна сторінка'
+    title_page = 'Головна сторінка'
     menu_selected = 'home'
     cat_selected = 0
-    paginate_by = 5
 
     def get_queryset(self):
         return Post.published.all().select_related('category')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = self.get_mixin_context(context)
+        return context
 
 
 def about(request):
 
     data = {
         'title': 'Про сайт',
-        'menu': menu,
         'menu_selected': 'about',
 
     }
@@ -54,7 +56,7 @@ class ShowPost(DataMixin, DetailView):
     template_name = 'blog/post.html'
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
-
+    menu_selected = ''
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title=context['post'].title)
@@ -69,6 +71,11 @@ class AddPage(DataMixin, CreateView):
     template_name = 'blog/addpage.html'
     title_page = 'Додати пост'
     menu_selected = 'add_post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = self.get_mixin_context(context)
+        return context
 
 
 
@@ -92,7 +99,6 @@ class DeletePage(DataMixin, DeleteView):
 def contacts(request):
     data = {
         'title': 'Контакти',
-        'menu': menu,
         'menu_selected': 'contacts'
     }
     return HttpResponse("<h1>Контакти</h1>")

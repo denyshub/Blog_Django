@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load blog_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +11,7 @@
 <div class="container">
     <div class="navbar">
       <img src="{% static 'blog/images/logo.svg' %}" alt="Logo" class="logo">
-        {% for elem in menu %}
-
+        {% for elem in main_menu %}
         {%if elem.url == menu_selected%}
         <p class = 'nav-links-active'>
             {{ elem.title }}
@@ -24,7 +23,7 @@
         {% endif %}
         {% endfor %}
         <p class = 'nav-links'>
-        <a href="{% url "login" %}"> <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile "></a>
+        <a href="{% url "users:login" %}"> <img src="{% static 'blog/images/profile.svg' %}" alt="login" class="profile "></a>
       </p>
       </div>
     {% block content %}

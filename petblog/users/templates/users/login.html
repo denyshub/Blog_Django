@@ -38,6 +38,8 @@
   </div>
   {%endfor%}
       <p><button type="submit">Увійти</button></p>
+      <div class="change-password_container">
+      <a href="{%url 'users:password_reset'%}">Забули пароль?</a> </div>
     </form>
     {%endif%}
   </div>

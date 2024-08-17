@@ -297,7 +297,7 @@ flex-direction: row;
   align-items: center;
 
   justify-content: center;
-  margin-bottom: 100px
+
 }
 
 .addpost-form{
@@ -460,4 +460,24 @@ text-decoration: none;
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+.change-password_container{
+  text-align: center;
+  text-decoration: none;
+
+}
+.change-password_container:hover a{
+  text-decoration: underline;
+  color: gray;
+}
+.change-password_container a{
+  text-decoration: none;
+  color: #000;
+}
+
+.reset-password-container{
+  margin-left: 100px;
+  margin-top: 50px;
+  font-size: 20px;
 }

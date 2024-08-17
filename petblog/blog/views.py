@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.forms import AddPostForm, UploadFileForm
 from blog.models import Post, Category, TagPost, UploadFile
@@ -42,28 +42,15 @@ def about(request):
     return render(request, 'blog/about.html', context=data)
 
 
-
-def archive(request, year):
-    if year > 2024:
-        url = reverse('categories', args=('games',))
-        return redirect(url)
-    return HttpResponse(f'<h1>Архів {year} року</h1>')
-
-
-def page_not_found(request, exception):
-    return HttpResponseNotFound("<h1>Сторінка не знайдена</h1>" )
-
-
 class ShowPost(DataMixin, DetailView):
     template_name = 'blog/post.html'
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
     menu_selected = ''
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title=context['post'].title)
-
-
 
     def get_object(self, queryset=None):
         return get_object_or_404(Post.published, slug=self.kwargs[self.slug_url_kwarg])
@@ -79,7 +66,6 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context = self.get_mixin_context(context)
         return context
-
 
     def form_valid(self, form):
         w = form.save(commit=False)
@@ -103,7 +89,6 @@ class DeletePage(DataMixin, DeleteView):
     success_url = reverse_lazy('home')
 
 
-
 def contacts(request):
     data = {
         'title': 'Контакти',
@@ -111,12 +96,6 @@ def contacts(request):
     }
     return HttpResponse("<h1>Контакти</h1>")
 
-def login(request):
-    data = {
-        'title': 'Увійти',
-        'menu_selected': 'login'
-    }
-    return HttpResponse("<h1>Увійти</h1>")
 
 class PostCategory(DataMixin, ListView):
     template_name = 'blog/index.html'
@@ -129,13 +108,17 @@ class PostCategory(DataMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = context['posts'][0].category
-        return self.get_mixin_context(context, title = 'Категорія - ' + category.name , cat_selected = category.pk)
+        return self.get_mixin_context(context, title='Категорія - ' + category.name , cat_selected = category.pk)
 
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound("Сторінку не знайдено")
 
 class PostTags(DataMixin, ListView):
     template_name = 'blog/index.html'
     context_object_name = 'posts'
     allow_empty = False
+
     def get_queryset(self):
         return Post.published.filter(tags__slug=self.kwargs['tag_slug'])
 

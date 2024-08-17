@@ -307,6 +307,7 @@ flex-direction: row;
 .form-error{
   color: red;
   position: relative;
+  width: 300px;
   list-style-type: none;
 }
 .errorlist{ list-style-type: none;}

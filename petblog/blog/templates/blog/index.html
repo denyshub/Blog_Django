@@ -37,9 +37,9 @@
             <p>{{post.time_create|date:"d-m-Y"}}</p>
           </div>
         </div>
-        <p class="content-text">{{post.content|truncatewords:25}}</p>
-        <a class="read-button" href="{{ post.get_absolute_url }}"
-          >Читати статтю</a
+        <div class="content-text">{{ post.content|slice:":500"|truncatewords:25|safe }}</div>
+        <a class="read-button" href="{{ post.get_absolute_url }}">Читати більше</a>
+        </a
         >
       </div>
     </div>

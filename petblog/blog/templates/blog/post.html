@@ -1,29 +1,53 @@
-{%extends 'base.html'%} {%block content%} {%with post.tags.all as tags and post.category as cat%}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% with post.tags.all as tags %}
+{% with post.category as cat %}
 <div class="title-container">
-  <h1 class="post-page-title">{{post.title}}</h1>
- 
-  <div class="tags-container">
-   <a href="{{ cat.get_absolute_url }}" class="post-tag">{{post.category}}&nbsp; </a>
-   {% if tags%}
-   <a class="post-tag-sign">><a/>
-    {%for tag in tags %}
-    <div class="post-tag">
-      <i> <a href="{{ tag.get_absolute_url }}" class="post-tag">{{tag}}</a> </i>
+    <div class="title-edit">
+        <h1 class="post-page-title">{{ post.title }}</h1>
+
+        {% if perms.post.change_post or post.author == user %}
+        <div>
+            <a href="{% url 'edit_page' post.slug %}" class="post-tag">
+                <img src="{% static 'blog/images/edit.svg' %}" alt="Edit" class="logo">
+            </a>
+            <a href="{% url 'delete_page' post.slug %}" class="post-tag">
+                <img src="{% static 'blog/images/trash.svg' %}" alt="Delete" class="logo">
+            </a>
+        </div>
+        {% endif %}
     </div>
-    {%endfor%} {%endif%}
-  </div>
-  <div class='time-container'>
-  <p class="post-time">
-    Опубліковано: {{ post.time_create|date:"d-m-Y H:i" }}
-  </p>
+
+    <div class="tags-container">
+        <a href="{{ cat.get_absolute_url }}" class="post-tag">{{ post.category }}&nbsp;</a>
+        {% if tags %}
+        <a class="post-tag-sign">></a>
+        {% for tag in tags %}
+        <div class="post-tag">
+            <i><a href="{{ tag.get_absolute_url }}" class="post-tag">{{ tag }}</a></i>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="time-container">
+        <p class="post-time">Автор: {{ post.author.username|default:"Невідомий" }}</p>
+        <p class="post-time">Опубліковано: {{ post.time_create|date:"d-m-Y H:i" }}</p>
+    </div>
 </div>
 
-</div>
 <div class="post-container">
-  <div class="content-container"> {%if post.image%}
-    <img src="{{ post.image.url }}" class='post-image-big'>
-    {%endif%}
-    <p class="post-page-content">{{ post.content|linebreaksbr }}</p>
-  </div>
+    <div class="content-container">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="post-image-big">
+        {% endif %}
+        <p class="post-page-content">{{ post.content|safe }}</p>
+
+    </div>
 </div>
-{%endwith%} {%endblock%}
+
+{% endwith %}
+{% endwith %}
+{% endblock %}

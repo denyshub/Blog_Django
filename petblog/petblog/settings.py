@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 
@@ -30,7 +30,13 @@ ALLOWED_HOSTS = ['127.0.0.1']
 INTERNAL_IPS = ["127.0.0.1",]
 STATICFILES_DIRS = [ BASE_DIR / 'petblog/static']
 # settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'denys.hubenko.ik.2022@lpnu.ua'
+EMAIL_HOST_PASSWORD = '06.06.2005'
+DEFAULT_FROM_EMAIL = 'denys.hubenko.ik.2022@lpnu.ua'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
@@ -47,8 +53,10 @@ INSTALLED_APPS = [
     'users',
     'django_extensions',
     "debug_toolbar",
+        'ckeditor',
+    'ckeditor_uploader',
 ]
-
+CKEDITOR_UPLOAD_PATH = "uploads/"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -143,3 +151,5 @@ LOGIN_URL = 'users:login'
 AUTHENTICATION_BACKENDS =  [
     "django.contrib.auth.backends.ModelBackend",
     "users.authentication.EmailAuthBackend"]
+
+

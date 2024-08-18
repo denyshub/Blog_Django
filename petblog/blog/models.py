@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Count, Q
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-
+from ckeditor.fields import RichTextField
 
 def translit_to_english(text):
     translit_dict = {
@@ -39,7 +39,7 @@ class Post(models.Model):
         MaxLengthValidator(100, message='Максимум 100 символів'),
     ],)
     image = models.ImageField(upload_to='images/%Y/%m/%d', default=None, blank=True, null=True, verbose_name = 'Фото')
-    content = models.TextField(blank=True,verbose_name='Вміст')
+    content = models.TextField(blank=True, verbose_name='Вміст')
     time_create = models.DateTimeField(auto_now_add=True,verbose_name='Дата створення')
     time_update = models.DateTimeField(auto_now=True,verbose_name='Дата зміни')
     is_published = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]),x[1]), Status.choices)), default=Status.PUBLISHED,verbose_name='Статус')

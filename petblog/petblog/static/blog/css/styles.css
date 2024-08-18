@@ -111,16 +111,26 @@ body {
 }
 
 .post-title {
-  font-size: 32px;
+  font-size: 26px;
 }
 
 .content-text {
-  color: black;
+  color: gray;
   font-size: 20px;
   text-decoration: none;
   margin-right: 20px;
 }
+.content-text h1,
+.content-text h2,
+.content-text h3
+.content-text h4{
 
+  font-size: 20px;
+
+}
+.content-text p{
+font-size: 17px;
+}
 .cats-container {
   margin: 70px 0px 100px 0px;
   width: 50;
@@ -168,6 +178,12 @@ body {
   padding-bottom: 50px;
 }
 
+.title-edit{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .post-page-content {
   font-size: 30px;
 }
@@ -193,6 +209,7 @@ width: 95%;
 display: flex;
 flex-direction: row;
 justify-content: end;
+gap:60px;
 }
 .title-date-cat {
   display: flex;
@@ -322,7 +339,7 @@ justify-content: canter
 }
 
 .post-image-small{
-  width: 300px;
+  width: 350px;
   left: 10px;
 }
 
@@ -428,7 +445,7 @@ text-decoration: none;
 }
 
 .title-container-main{
-  width: 400px;
+  width: fit-content;
 }
 
 .profile-container {
@@ -480,4 +497,23 @@ text-decoration: none;
   margin-left: 100px;
   margin-top: 50px;
   font-size: 20px;
+}
+
+.main-content{
+  width: 90%;
+}
+
+.align-content{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.content-text {
+  font-size: 14px; /* Зменшити розмір шрифту для іконки */
+  line-height: 1.4; /* Встановити висоту рядка для кращої читабельності */
+  color: #333; /* Колір тексту */
+  padding: 10px; /* Відступи всередині блоку */
 }

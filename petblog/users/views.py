@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, TemplateView
+from django.contrib.auth.models import Group
 
 from users.forms import LoginUserForm, RegisterUserForm, ProfileUserForm, ChangePasswordChange
 
@@ -23,6 +24,14 @@ class RegisterUser(CreateView):
     template_name = 'users/register.html'
     extra_context = {'title': 'Реєстрація'}
     success_url = reverse_lazy('users:login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = form.instance
+        group, created = Group.objects.get_or_create(name='users')
+        user.groups.add(group)
+
+        return response
 
 class ProfileUser(LoginRequiredMixin, UpdateView):
     model = get_user_model()
@@ -47,3 +56,4 @@ class PasswordChangeDoneView(PasswordContextMixin, TemplateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+

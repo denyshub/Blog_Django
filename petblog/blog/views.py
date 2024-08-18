@@ -1,14 +1,14 @@
 import os, uuid
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from blog.forms import AddPostForm, UploadFileForm
 from blog.models import Post, Category, TagPost, UploadFile
@@ -41,6 +41,15 @@ def about(request):
 
     return render(request, 'blog/about.html', context=data)
 
+class AboutPage(DataMixin, TemplateView):
+    template_name = 'blog/about.html'
+    menu_selected = 'about'
+    title_page = 'Про нас'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context = self.get_mixin_context(context)
+        return context
+
 
 class ShowPost(DataMixin, DetailView):
     template_name = 'blog/post.html'
@@ -56,12 +65,13 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(Post.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+
+class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'blog/addpage.html'
     title_page = 'Додати пост'
     menu_selected = 'add_post'
-
+    permission_required = 'blog.add_post'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context = self.get_mixin_context(context)
@@ -73,20 +83,31 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Post
     title_page = 'Редагувати пост'
-    fields = ['title', 'image', 'content','is_published', 'category', 'tags']
-    template_name = 'blog/addpage.html'
-    success_url = reverse_lazy('home')
-
-
-class DeletePage(DataMixin, DeleteView):
-    model = Post
-    title_page =  'Видалити пост'
     fields = ['title', 'image', 'content', 'is_published', 'category', 'tags']
     template_name = 'blog/addpage.html'
     success_url = reverse_lazy('home')
+    permission_required = 'blog.change_post'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Post.objects.all()
+        return Post.objects.filter(author=self.request.user)
+
+
+class DeletePage(PermissionRequiredMixin, DataMixin, DeleteView):
+    model = Post
+    title_page = 'Видалити пост'
+    template_name = 'blog/addpage.html'
+    success_url = reverse_lazy('home')
+    permission_required = 'blog.delete_post'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Post.objects.all()
+        return Post.objects.filter(author=self.request.user)
 
 
 def contacts(request):

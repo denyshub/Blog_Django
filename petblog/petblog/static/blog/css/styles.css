@@ -176,14 +176,22 @@ font-size: 17px;
 .post-page-title {
   font-size: 50px;
   padding-bottom: 50px;
+  width: 90%;
 }
 
 .title-edit{
   display: flex;
+  width: 95%;
   justify-content: space-between;
   align-items: center;
+  gap: 300px
 }
-
+.del-edit{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 .post-page-content {
   font-size: 30px;
 }
@@ -195,6 +203,10 @@ font-size: 17px;
   margin-bottom: 200px;
 }
 
+.content-container p,
+.content-container li{
+font-size: 23px;
+}
 .title-container {
   margin-left: 100px;
   margin-top: 100px;
@@ -339,8 +351,8 @@ justify-content: canter
 }
 
 .post-image-small{
-  width: 350px;
-  left: 10px;
+  width: 400px;
+  
 }
 
 .post-image-big{
@@ -516,4 +528,41 @@ text-decoration: none;
   line-height: 1.4; /* Встановити висоту рядка для кращої читабельності */
   color: #333; /* Колір тексту */
   padding: 10px; /* Відступи всередині блоку */
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: black; /* Синій колір при фокусі */
+}
+
+.search-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 30px;
+  background-color: gray; /* Синій фон кнопки */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: black; /* Темніший синій колір при наведенні */
 }

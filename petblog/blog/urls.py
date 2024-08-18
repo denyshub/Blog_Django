@@ -12,6 +12,7 @@ urlpatterns = [
     path('category/<slug:category_slug>/', views.PostCategory.as_view(), name='category'),
     path('tag/<slug:tag_slug>/', views.PostTags.as_view(), name='tag'),
     path('edit/<slug:slug>/', views.UpdatePage.as_view(), name='edit_page'),
-    path('delete/<slug:slug>/', views.DeletePage.as_view(), name='delete_page')
+    path('delete/<slug:slug>/', views.DeletePage.as_view(), name='delete_page'),
+    path('search/', views.ArticleSearchView.as_view(), name='article_search'),
 ]
 

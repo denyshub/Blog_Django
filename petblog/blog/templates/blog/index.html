@@ -1,52 +1,71 @@
-{% extends 'base.html' %} {% load blog_tags %} {%block content%}
+{% extends 'base.html' %}
+{% load blog_tags %}
 
-<h1 class="main-label">{{title}}</h1>
+{% block content %}
+<form method="GET" action="{% url 'article_search' %}" class="search-form" onsubmit="return validateSearch()">
+    <input type="text" name="q" placeholder="Пошук статей..." class="search-input" id="search-input">
+    <button type="submit" class="search-button">Шукати</button>
+</form>
+
+<script>
+    function validateSearch() {
+        var query = document.getElementById('search-input').value.trim();
+        if (query === "") {
+            alert("Будь ласка, введіть запит для пошуку.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<h1 class="main-label">{{ title }}</h1>
 
 <div class="tag-cat-container">
   <div class="cats-container-center">
     <div class="cats-container">{% show_categories cat_selected %}</div>
   </div>
   <div class="tag-container-col">
-    <div class="tag-cont">{%show_all_tags tag_selected%}</div>
+    <div class="tag-cont">{% show_all_tags tag_selected %}</div>
   </div>
 </div>
-{%if posts%}
-<div class="posts-container">
-  {%else%}
-  <div class="no-posts">Немає статей на цю тему :(</div>
-  {%endif%} {% for post in posts%} {%if not forloop.last%}
-  <div class="post">
-    {%else%}
 
+{% if posts %}
+<div class="posts-container">
+  {% for post in posts %}
+    {% if not forloop.last %}
+    <div class="post">
+    {% else %}
     <div class="post-last">
-      {%endif%} {%if post.image%}
+    {% endif %}
+      {% if post.image %}
       <img src="{{ post.image.url }}" class="post-image-small" />
-      {%endif%}
+      {% endif %}
       <div class="post-text">
         <div class="title-date-cat">
           <div class="author-container">
             <div class="title-container-main">
-              <h2 class="post-title">{{post.title}}</h2>
+              <h2 class="post-title">{{ post.title|truncatechars:30 }}</h2>
             </div>
-            <p>Автор: {{post.author.username|default:"Невідомий"}}</p>
+            <p>{{ post.author.username|default:"Невідомий" }}</p>
           </div>
           <div class="date-cat">
-            <p>{{post.category}}</p>
+            <p>{{ post.category }}</p>
             <p>|</p>
-
-            <p>{{post.time_create|date:"d-m-Y"}}</p>
+            <p>{{ post.time_create|date:"d-m-Y" }}</p>
           </div>
         </div>
         <div class="content-text">{{ post.content|slice:":500"|truncatewords:25|safe }}</div>
         <a class="read-button" href="{{ post.get_absolute_url }}">Читати більше</a>
-        </a
-        >
       </div>
     </div>
-    {%endfor%}
-  </div>
+  {% endfor %}
 </div>
-{% endblock %} {% block navigation %}
+{% else %}
+<div class="no-posts">Немає статей на цю тему :(</div>
+{% endif %}
+{% endblock %}
+
+{% block navigation %}
 {% if page_obj.has_other_pages %}
 <nav class="list-pages">
   <ul>
@@ -56,17 +75,17 @@
     </li>
     {% endif %}
     {% for p in paginator.page_range %}
-    {% if p == page_obj.number %}
-    <li class="page-num">
-      <a class="active">{{ p }}</a>
-    </li>
-    {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 or p == 1 or p == paginator.page_range|last %}
-    <li class="page-num">
-      <a href="?page={{ p }}">{{ p }}</a>
-    </li>
-    {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}
-    <li class="page-num page-num-active">...</li>
-    {% endif %}
+      {% if p == page_obj.number %}
+      <li class="page-num">
+        <a class="active">{{ p }}</a>
+      </li>
+      {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 or p == 1 or p == paginator.page_range|last %}
+      <li class="page-num">
+        <a href="?page={{ p }}">{{ p }}</a>
+      </li>
+      {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}
+      <li class="page-num page-num-active">...</li>
+      {% endif %}
     {% endfor %}
     {% if page_obj.has_next %}
     <li class="page-num">
@@ -77,4 +96,3 @@
 </nav>
 {% endif %}
 {% endblock %}
-

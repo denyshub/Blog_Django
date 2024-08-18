@@ -14,6 +14,26 @@ from blog.forms import AddPostForm, UploadFileForm
 from blog.models import Post, Category, TagPost, UploadFile
 from blog.utils import DataMixin
 
+from django.db.models import Q
+
+class ArticleSearchView(DataMixin, ListView):
+    model = Post
+    template_name = 'blog/index.html'  # Зазначте ваш шаблон тут
+    context_object_name = 'posts'
+    title_page = 'Результати пошуку'
+    def get_queryset(self):
+
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) | Q(content__icontains=query)
+            )
+        return Post.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q')
+        return context
 
 class BlogHome(DataMixin, ListView):
     template_name = 'blog/index.html'
@@ -30,16 +50,6 @@ class BlogHome(DataMixin, ListView):
         context = self.get_mixin_context(context)
         return context
 
-
-def about(request):
-
-    data = {
-        'title': 'Про сайт',
-        'menu_selected': 'about',
-
-    }
-
-    return render(request, 'blog/about.html', context=data)
 
 class AboutPage(DataMixin, TemplateView):
     template_name = 'blog/about.html'
@@ -108,14 +118,6 @@ class DeletePage(PermissionRequiredMixin, DataMixin, DeleteView):
         if self.request.user.is_superuser:
             return Post.objects.all()
         return Post.objects.filter(author=self.request.user)
-
-
-def contacts(request):
-    data = {
-        'title': 'Контакти',
-        'menu_selected': 'contacts'
-    }
-    return HttpResponse("<h1>Контакти</h1>")
 
 
 class PostCategory(DataMixin, ListView):

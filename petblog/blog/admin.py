@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Post, Category
+from .models import Post, Category, TagPost
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -42,3 +43,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id','name')
     list_display_links = ('id', 'name')
 
+@admin.register(TagPost)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('id','tag')
+    list_display_links = ('id', 'tag')

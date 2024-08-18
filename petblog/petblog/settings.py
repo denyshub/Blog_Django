@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
+
 from pathlib import Path
 
 
@@ -53,10 +53,8 @@ INSTALLED_APPS = [
     'users',
     'django_extensions',
     "debug_toolbar",
-        'ckeditor',
-    'ckeditor_uploader',
 ]
-CKEDITOR_UPLOAD_PATH = "uploads/"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

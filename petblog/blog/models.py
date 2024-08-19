@@ -33,13 +33,13 @@ class Post(models.Model):
         DRAFT = 0
         PUBLISHED = 1
 
-    title = models.CharField(max_length=255,verbose_name='Заголовок')
+    title = models.CharField(max_length=255, verbose_name='Заголовок')
     slug = models.SlugField(max_length=255, unique=True, db_index=True,  validators=[
         MinLengthValidator(5, message='Мінімум 5 символів'),
         MaxLengthValidator(100, message='Максимум 100 символів'),
     ],)
     image = models.ImageField(upload_to='images/%Y/%m/%d', default=None, blank=True, null=True, verbose_name = 'Фото')
-    content = models.TextField(blank=True,verbose_name='Вміст')
+    content = models.TextField(blank=True, verbose_name='Вміст')
     time_create = models.DateTimeField(auto_now_add=True,verbose_name='Дата створення')
     time_update = models.DateTimeField(auto_now=True,verbose_name='Дата зміни')
     is_published = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]),x[1]), Status.choices)), default=Status.PUBLISHED,verbose_name='Статус')

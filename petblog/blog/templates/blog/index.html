@@ -44,7 +44,7 @@
         <div class="title-date-cat">
           <div class="author-container">
             <div class="title-container-main">
-              <h2 class="post-title">{{ post.title|truncatechars:30 }}</h2>
+              <h2 class="post-title">{{ post.title|truncatechars:30|capfirst }}</h2>
             </div>
             <p>{{ post.author.username|default:"Невідомий" }}</p>
           </div>
@@ -61,7 +61,7 @@
   {% endfor %}
 </div>
 {% else %}
-<div class="no-posts">Немає статей на цю тему :(</div>
+<div class="no-posts">Немає статей на цю тему</div>
 {% endif %}
 {% endblock %}
 

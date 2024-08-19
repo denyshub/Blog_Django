@@ -6,7 +6,7 @@
 {% with post.category as cat %}
 <div class="title-container">
     <div class="title-edit">
-        <h1 class="post-page-title">{{ post.title }}</h1>
+        <h1 class="post-page-title">{{ post.title|capfirst }}</h1>
 
         {% if perms.post.change_post or post.author == user %}
         <div class='del-edit'>

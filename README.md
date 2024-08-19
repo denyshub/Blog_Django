@@ -1,33 +1,22 @@
-# Блог-сайт на Django
+#Django Blog Site
+This project is a blog site where users can add posts after registration and login.
 
-Цей проект є блог-сайтом, де користувачі можуть додавати пости після реєстрації та авторизації.
+##Features
+**Registration:** Users can create new accounts.
+**Login:** Users can log into the system.
+**Adding Posts:** After logging in, users can create new posts.
+**Editing and Deleting Posts:** Users can edit and delete only their own posts.
+**Viewing Posts:** All users can view posts.
 
-## Функціонал
+##Technical Details#
+The project uses Django to implement all features. SQLite is used for data storage during development.
 
-- **Реєстрація**: Користувачі можуть створювати нові акаунти.
-- **Авторизація**: Користувачі можуть входити в систему.
-- **Додавання постів**: Після авторизації користувачі можуть створювати нові пости.
-- **Редагування та видалення постів**: Користувачі можуть редагувати та видаляти лише свої пости.
-- **Перегляд постів**: Всі користувачі можуть переглядати пости.
-
-## Технічні деталі
-
-Проект використовує Django для реалізації всіх функцій. Для зберігання даних під час розробки використовується SQLite.
-
-## Кроки для запуску проекту
-
-1. **Завантаження проекту із GitHub**
-   Створюємо довільну папку.
-   Переходимо в неї і виконуємо: https://github.com/denyshub/Blog_Django.git
-   
-3. **Віртуальне середовище і запуск сайту**
-   Переходимо в папку проекту: cd .\Blog_Django\
-   Активуємо віртуальне середовище: .\djvenv\Scripts\activate
-   Переходимо в кореневий каталог: cd .\petblog\
-   Запускаємо сервер: python manage.py runserver
-   
-   Переходимо за посиланням в браузері: http://127.0.0.1:8000/
-   
-
-
-
+##Steps to Run the Project#
+1 .**Clone the Project from GitHub**
+2. **Create any folder.**
+3. **Navigate to it and run: git clone https://github.com/denyshub/Blog_Django.git**
+4. **Navigate to the project folder: cd Blog_Django**
+5. **Activate the virtual environment: .\djvenv\Scripts\activate**
+6. **Go to the root directory: cd petblog**
+7. **Start the server: python manage.py runserver**
+8. **Open the browser and go to: http://127.0.0.1:8000/**

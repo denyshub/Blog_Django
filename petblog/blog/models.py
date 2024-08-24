@@ -5,17 +5,11 @@ from django.db.models import Count, Q
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from ckeditor.fields import RichTextField
+from transliterate import translit
+
 
 def translit_to_english(text):
-    translit_dict = {
-        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'h', 'ґ': 'g', 'д': 'd', 'е': 'e', 'є': 'ie',
-        'ж': 'zh', 'з': 'z', 'и': 'y', 'і': 'i', 'ї': 'i', 'й': 'i', 'к': 'k', 'л': 'l',
-        'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
-        'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ю': 'iu', 'я': 'ia',
-        'ь': '', '’': '', ' ': '-',
-    }
-
-    return "".join(map(lambda x: translit_dict[x] if translit_dict.get(x, False) else x, text.lower()))
+    return translit(text, language_code='uk', reversed=True)
 
 
 class PublishedManager(models.Manager):
@@ -63,7 +57,8 @@ class Post(models.Model):
         return reverse('post', kwargs={'post_slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = self.slug if self.slug else slugify(translit_to_english(self.title))
+        if not self.slug:
+            self.slug = slugify(translit_to_english(self.title))
         super().save(*args, **kwargs)
 
     
@@ -102,8 +97,8 @@ class TagPost(models.Model):
         return reverse('tag', kwargs={'tag_slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = self.slug if self.slug else slugify(translit_to_english(self.title))
+        if not self.slug:
+            self.slug = slugify(translit_to_english(self.tag))
         super().save(*args, **kwargs)
-
 class UploadFile(models.Model):
     file = models.FileField(upload_to='uploads_model')

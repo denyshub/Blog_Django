@@ -12,7 +12,7 @@ This project is a blog site where users can add posts after registration and log
 
 ## Technical Details
 
-The project uses Django to implement all features. SQLite is used for data storage during development.
+The project uses Django to implement all features. SQLite was used for data storage during development but has been switched to PostgreSQL.
 
 ## Steps to Run the Project
 
@@ -23,23 +23,36 @@ The project uses Django to implement all features. SQLite is used for data stora
      git clone https://github.com/denyshub/Blog_Django.git
      ```
 
-2. **Set Up the Virtual Environment and Run the Site**
+2. **Set Up the Virtual Environment and Install Dependencies**
    - Navigate to the project folder:
      ```bash
      cd Blog_Django
      ```
-   - Activate the virtual environment:
+   - Create and activate a virtual environment:
      ```bash
-     .\djvenv\Scripts\activate
+     python -m venv venv
+     source venv/bin/activate  # For Windows: venv\Scripts\activate
      ```
-   - Go to the root directory:
+   - Install the required dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
+
+3. **Apply Migrations and Start the Server**
+   - Navigate to the root directory of your Django project:
      ```bash
      cd petblog
+     ```
+   - Apply migrations to set up the database:
+     ```bash
+     python manage.py migrate
      ```
    - Start the server:
      ```bash
      python manage.py runserver
      ```
 
-3. **Open the Browser**
+4. **Open the Browser**
    - Go to: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+
+

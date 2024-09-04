@@ -52,7 +52,10 @@ INSTALLED_APPS = [
     'blog',
     'users',
     'django_extensions',
-    "debug_toolbar",
+    'debug_toolbar',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -93,22 +96,22 @@ WSGI_APPLICATION = 'petblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'django_blog_db',
-#         'USER': 'postgres',
-#         'PASSWORD': '21211488',
-#         'HOST': '127.0.0.1',  # Add this line if you are using a local server
-#         'PORT': '5432',       # Add this line for the default port
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_blog_db',
+        'USER': 'postgres',
+        'PASSWORD': '21211488',
+        'HOST': '127.0.0.1',  # Add this line if you are using a local server
+        'PORT': '5432',       # Add this line for the default port
+    }
+}
 
 
 # Password validation
@@ -160,4 +163,16 @@ AUTHENTICATION_BACKENDS =  [
     "django.contrib.auth.backends.ModelBackend",
     "users.authentication.EmailAuthBackend"]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+}
 

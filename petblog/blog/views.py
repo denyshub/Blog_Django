@@ -2,13 +2,22 @@ import os, uuid
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q, Prefetch
+from django.forms import model_to_dict
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from rest_framework import generics, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from blog.forms import AddPostForm
-from blog.models import Post, TagPost
+from blog.models import Post, TagPost, Category
+from blog.permissions import IsAuthorOrAdmin
+from blog.serializers import PostSerializer
 from blog.utils import DataMixin
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -163,3 +172,39 @@ class PostTags(DataMixin, ListView):
         tag = get_object_or_404(TagPost, slug=self.kwargs['tag_slug'])
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Тег - ' + tag.tag, tag_selected=tag.pk)
+
+
+#######################################################################
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            return Post.objects.all()[:3]
+        return Post.objects.filter(pk=pk)
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAuthorOrAdmin]
+        elif self.action == 'create':
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
+
+    @action(methods=['get'], detail=True)
+    def category(self, request, pk=None):
+        posts = Post.objects.filter(category__id=pk)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True)
+    def tag(self, request, pk=None):
+        # Фільтруємо пости за тегом (ManyToMany)
+        posts = Post.objects.filter(tags__id=pk)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)

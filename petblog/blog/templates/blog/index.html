@@ -2,11 +2,13 @@
 {% load blog_tags %}
 
 {% block content %}
+<!-- Форма для пошуку -->
 <form method="GET" action="{% url 'article_search' %}" class="search-form" onsubmit="return validateSearch()">
     <input type="text" name="q" placeholder="Пошук статей..." class="search-input" id="search-input">
     <button type="submit" class="search-button">Шукати</button>
 </form>
 
+<!-- Скрипт для валідації пошуку -->
 <script>
     function validateSearch() {
         var query = document.getElementById('search-input').value.trim();
@@ -20,6 +22,7 @@
 
 <h1 class="main-label">{{ title }}</h1>
 
+<!-- Відображення категорій та тегів -->
 <div class="tag-cat-container">
   <div class="cats-container-center">
     <div class="cats-container">{% show_categories cat_selected %}</div>
@@ -29,6 +32,7 @@
   </div>
 </div>
 
+<!-- Відображення постів -->
 {% if posts %}
 <div class="posts-container">
   {% for post in posts %}
@@ -66,6 +70,7 @@
 {% endblock %}
 
 {% block navigation %}
+<!-- Навігація по сторінкам -->
 {% if page_obj.has_other_pages %}
 <nav class="list-pages">
   <ul>

@@ -1,39 +1,37 @@
-import os, uuid
+from linecache import cache
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import Q, Prefetch
-from django.forms import model_to_dict
-from django.http import HttpResponseNotFound
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from rest_framework import generics, viewsets
+from rest_framework import viewsets, filters
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from blog.forms import AddPostForm
-from blog.models import Post, TagPost, Category
+from blog.models import Post, TagPost
 from blog.permissions import IsAuthorOrAdmin
 from blog.serializers import PostSerializer
 from blog.utils import DataMixin
-from django.views.decorators.cache import cache_page
-from django.core.cache import cache
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ArticleSearchView(DataMixin, ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'posts'
+
     def get_queryset(self):
         query = self.request.GET.get('q')
         self.title_page = f'Результати пошуку: {query}'
         if query:
             return Post.objects.select_related('author', 'category').filter(
                 Q(title__icontains=query) | Q(content__icontains=query)
-            ).distinct().defer('time_update','is_published','tags',)
+            ).distinct().defer('time_update', 'is_published', 'tags')
         return Post.objects.none()
 
     def get_context_data(self, **kwargs):
@@ -51,13 +49,12 @@ class BlogHome(DataMixin, ListView):
     cat_selected = 0
 
     def get_queryset(self):
-        return Post.published.all().select_related('category', 'author').defer('time_update','is_published','tags',)
+        return Post.published.all().select_related('category', 'author').defer('time_update', 'is_published', 'tags')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context = self.get_mixin_context(context)
         return context
-
 
 class AboutPage(DataMixin, TemplateView):
     template_name = 'blog/about.html'
@@ -81,8 +78,7 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context['post'].title)
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Post.published.select_related('category', 'author').only('title', 'content', 'time_create','slug', 'category','author', 'image'), slug=self.kwargs[self.slug_url_kwarg])
-
+        return get_object_or_404(Post.published.select_related('category', 'author').only('title', 'content', 'time_create', 'slug', 'category', 'author', 'image'), slug=self.kwargs[self.slug_url_kwarg])
 
 class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
@@ -140,13 +136,12 @@ class PostCategory(DataMixin, ListView):
     allow_empty = False
 
     def get_queryset(self):
-        return Post.published.filter(category__slug=self.kwargs['category_slug']).select_related('category', 'author').defer('time_update','is_published','tags',)
+        return Post.published.filter(category__slug=self.kwargs['category_slug']).select_related('category', 'author').defer('time_update', 'is_published', 'tags')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = context['posts'][0].category
         return self.get_mixin_context(context, title='Категорія - ' + category.name, cat_selected=category.pk)
-
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("Сторінку не знайдено")
@@ -173,21 +168,21 @@ class PostTags(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         return self.get_mixin_context(context, title='Тег - ' + tag.tag, tag_selected=tag.pk)
 
-
 #######################################################################
 
+class PostViewSetPaginator(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'  # Користувач може змінювати кількість елементів на сторінку
+    max_page_size = 10000
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        if not pk:
-            return Post.objects.all()[:3]
-        return Post.objects.filter(pk=pk)
-
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['title', 'content']  # Поля для пошуку
+    ordering_fields = ['time_create', 'title']  # Поля для сортування
+    ordering = ['-time_create']  # Значення за замовчуванням для сортування
 
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
@@ -196,15 +191,27 @@ class PostViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            return Post.objects.all()
+        return Post.objects.filter(pk=pk)
+
     @action(methods=['get'], detail=True)
     def category(self, request, pk=None):
         posts = Post.objects.filter(category__id=pk)
+        paginator = PostViewSetPaginator()
+        paginated_posts = paginator.paginate_queryset(posts, request)
+
+        if paginated_posts is not None:
+            serializer = PostSerializer(paginated_posts, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
     @action(methods=['get'], detail=True)
     def tag(self, request, pk=None):
-        # Фільтруємо пости за тегом (ManyToMany)
         posts = Post.objects.filter(tags__id=pk)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)

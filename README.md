@@ -35,7 +35,7 @@ The project uses Django to implement all features. SQLite was used for data stor
      ```
    - Install the required dependencies:
      ```bash
-     pip install -r requirements.txt
+     pip install -r petblog/requirements.txt
      ```
 
 3. **Apply Migrations and Start the Server**
